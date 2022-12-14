@@ -1,9 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
-import weakref
 from templates import *
-
-##newlines to br in bericht
 
 
 class FahrzeugeFrame(ctk.CTkFrame):
@@ -48,7 +45,8 @@ class App(ctk.CTk):
         super().__init__()
 
         self.title("FF-Bhk Einsatzgenerator")
-        self.geometry("950x880")
+        # self.geometry("950x900")
+        # self.geometry("950x880")
 
         self.grid_columnconfigure((0, 1), weight=1)
 
@@ -72,6 +70,8 @@ class App(ctk.CTk):
         self.output_entry.insert(tk.END, data)
 
     def generate(self):
+        self.generator_entry.level_entry.configure(values=([1, 2, 3, 4] if self.generator_entry.type.get() == "Brandeinsatz (B)" else [1, 2, 3]))
+
         date = self.generator_entry.date.get().replace(".", "")
         date_with_dots = self.generator_entry.date.get()
         if len(date) != 8:
@@ -134,14 +134,20 @@ class App(ctk.CTk):
             elif fahrzeug == "WLF":
                 fahrzeuge_bild += temp_auto_wlf
 
-        eingesetzte_menner = int(self.generator_entry.eingesetzte_menner.get())
+        eingesetzte_menner_text = self.generator_entry.eingesetzte_menner.get()
+
+        if not eingesetzte_menner_text.isnumeric():
+            self.write_out("Fehler: Eingesetzte Männer ist keine Zahl")
+            return
+
+        eingesetzte_menner = int(eingesetzte_menner_text)
 
         if not eingesetzte_menner:
             self.write_out("Fehler: Keine eingesetzten Männer angegeben")
             return
 
         andere_beteiligte = ""
-        unsere_ff = f'FF Böheimkirchen ‑ Markt ({len(fahrzeuge)} Fahrzeug{"" if len(fahrzeuge)==1 else "e"} + {eingesetzte_menner} Mann ‑ inkl. Bereitschaft)'
+        unsere_ff = f'FF Böheimkirchen - Markt ({len(fahrzeuge)} Fahrzeug{"" if len(fahrzeuge)==1 else "e"} + {eingesetzte_menner} Mann ‑ inkl. Bereitschaft)'
         andere_beteiligte += temp_andere_beteiligte.replace("[--andere--beteiligte--]", unsere_ff)
 
         andere_beteiligte_read = self.generator_entry.andere_beteiligte.get()
@@ -219,8 +225,14 @@ class Generator(ctk.CTkFrame):
         self.alarmierung_pager_entry = ctk.CTkCheckBox(self, text="Pager", variable=self.pager).grid(row=6, column=1, padx=10, pady=2)
 
         # art des einsatzes
-        self.type_entry = ctk.CTkSegmentedButton(self, variable=self.type, values=["Brandeinsatz (B)", "Technischer Einsatz (T)", "Schadstoffeinsatz (S)"]).grid(row=7, column=0, columnspan=2, padx=10, pady=10)
-        self.level_entry = ctk.CTkSegmentedButton(self, variable=self.level, values=[1, 2, 3, 4]).grid(row=8, column=0, columnspan=2, padx=10, pady=10)
+        self.type_entry = ctk.CTkSegmentedButton(self, variable=self.type, values=["Brandeinsatz (B)", "Technischer Einsatz (T)", "Schadstoffeinsatz (S)"])
+        # func = lambda event: self.level_entry.configure(values=([1, 2, 3, 4] if self.type.get() == "Brandeinsatz (B)" else [1, 2, 3]))
+        # self.type_entry.bind("<KeyRelease>", func)
+        self.type_entry.grid(row=7, column=0, columnspan=2, padx=10, pady=10)
+
+        self.level_entry = ctk.CTkSegmentedButton(self, variable=self.level, values=[1, 2, 3, 4])
+        self.level_entry.grid(row=8, column=0, columnspan=2, padx=10, pady=10)
+        # self.level_entry.configure(values=[1, 2, 3, 4])
 
         # fahrzeuge
         self.fahrzeuge_label = ctk.CTkLabel(self, text="Eingesetzte Fahrzeuge:").grid(row=9, column=0, columnspan=2, padx=10, pady=2)
@@ -231,13 +243,13 @@ class Generator(ctk.CTkFrame):
         self.beteiligte_label = ctk.CTkLabel(self, text="Andere Beteiligte:").grid(row=11, column=0, columnspan=2, padx=10, pady=2)
         self.beteiligte_entry = ctk.CTkTextbox(self, height=100, font=("Arial", 12))
         self.beteiligte_entry.bind("<KeyRelease>", lambda event: self.andere_beteiligte.set(event.widget.get("1.0", "end-1c")))
-        self.beteiligte_entry.grid(row=12, column=0, columnspan=2, sticky="ew", padx=10, pady=2)
+        self.beteiligte_entry.grid(row=12, column=0, columnspan=2, sticky="nesw", padx=10, pady=2)
 
         # einsatzbericht
         self.einsatzbericht_label = ctk.CTkLabel(self, text="Einsatzbericht:").grid(row=13, column=0, columnspan=2, padx=10, pady=2)
         self.einsatzbericht_entry = ctk.CTkTextbox(self, font=("Arial", 12))
         self.einsatzbericht_entry.bind("<KeyRelease>", lambda event: self.einsatzbericht.set(event.widget.get("1.0", "end-1c")))
-        self.einsatzbericht_entry.grid(row=14, column=0, columnspan=2, sticky="news", padx=10, pady=10)
+        self.einsatzbericht_entry.grid(row=14, column=0, columnspan=2, sticky="nesw", padx=10, pady=10)
 
 
 if __name__ == "__main__":
