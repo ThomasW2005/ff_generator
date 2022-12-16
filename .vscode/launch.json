@@ -11,6 +11,11 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true
+        },
+        //create a config to compile the file ff_generator into an executable
+        {
+            
         }
+
     ]
 }
