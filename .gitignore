@@ -3,3 +3,4 @@ generator.spec
 build/
 dist/
 *.pyc
+*.spec
