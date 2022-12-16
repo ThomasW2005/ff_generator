@@ -44,7 +44,7 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("FF-Bhk Einsatzgenerator")
+        self.title("FF-Bhk Einsatzgenerator v1.1")
         # self.geometry("950x900")
         # self.geometry("950x880")
 
