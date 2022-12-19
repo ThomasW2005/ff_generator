@@ -70,111 +70,116 @@ class App(ctk.CTk):
         self.output_entry.insert(tk.END, data)
 
     def generate(self):
-        self.generator_entry.level_entry.configure(values=([1, 2, 3, 4] if self.generator_entry.type.get() == "Brandeinsatz (B)" else [1, 2, 3]))
 
-        date = self.generator_entry.date.get().replace(".", "")
-        date_with_dots = self.generator_entry.date.get()
-        if len(date) != 8:
-            self.write_out("Fehler: Datum ist nicht korrekt")
-            return
+        try:
+            self.generator_entry.level_entry.configure(values=([1, 2, 3, 4] if self.generator_entry.type.get() == "Brandeinsatz (B)" else [1, 2, 3]))
 
-        if (not self.generator_entry.type.get()) and (not self.generator_entry.level.get()):
-            self.write_out("Fehler: Kein Einsatztyp ausgewählt")
-            return
-        type = self.generator_entry.type.get()[0] + str(self.generator_entry.level.get())
+            date = self.generator_entry.date.get().replace(".", "")
+            date_with_dots = self.generator_entry.date.get()
+            if len(date) != 8:
+                self.write_out("Fehler: Datum ist nicht korrekt")
+                return
 
-        if type == "T4" or type == "S4":
-            self.write_out("Fehler: Einsatzstufe 4 ist nicht für Technische oder Schadstoffeinsätze möglich")
-            return
+            if (not self.generator_entry.type.get()) or (not self.generator_entry.level.get()):
+                self.write_out("Fehler: Kein Einsatztyp ausgewählt")
+                return
+            type = self.generator_entry.type.get()[0] + str(self.generator_entry.level.get())
 
-        meldebild = self.generator_entry.einsatz_meldebild.get()
-        if not meldebild:
-            self.write_out("Fehler: Kein Meldebild ausgewählt")
-            return
+            if type == "T4" or type == "S4":
+                self.write_out("Fehler: Einsatzstufe 4 ist nicht für Technische oder Schadstoffeinsätze möglich")
+                return
 
-        uhrzeit = self.generator_entry.uhrzeit.get()
-        if len(uhrzeit) != 5:
-            self.write_out("Fehler: Uhrzeit ist nicht korrekt")
-            return
+            meldebild = self.generator_entry.einsatz_meldebild.get()
+            if not meldebild:
+                self.write_out("Fehler: Kein Meldebild ausgewählt")
+                return
 
-        ort = self.generator_entry.einsatzort.get()
-        if not ort:
-            self.write_out("Fehler: Kein Einsatzort angegeben")
-            return
+            uhrzeit = self.generator_entry.uhrzeit.get()
+            if len(uhrzeit) != 5:
+                self.write_out("Fehler: Uhrzeit ist nicht korrekt")
+                return
 
-        alarmierung = ""
-        if not self.generator_entry.pager.get() and not (self.generator_entry.sirene.get()):
-            self.write_out("Fehler: Keine Alarmierung ausgewählt")
-            return
+            ort = self.generator_entry.einsatzort.get()
+            if not ort:
+                self.write_out("Fehler: Kein Einsatzort angegeben")
+                return
 
-        if self.generator_entry.pager.get():
-            alarmierung += temp_pager
-        if self.generator_entry.sirene.get():
-            alarmierung += temp_sirene
+            alarmierung = ""
+            if not self.generator_entry.pager.get() and not (self.generator_entry.sirene.get()):
+                self.write_out("Fehler: Keine Alarmierung ausgewählt")
+                return
 
-        fahrzeuge_bild = ""
-        fahrzeuge_text = ""
-        fahrzeuge = self.generator_entry.fahrzeuge_entry.get_fahrzeuge()
-        if not fahrzeuge:
-            self.write_out("Fehler: Keine Fahrzeuge ausgewählt")
-            return
+            if self.generator_entry.pager.get():
+                alarmierung += temp_pager
+            if self.generator_entry.sirene.get():
+                alarmierung += temp_sirene
 
-        for fahrzeug in fahrzeuge:
-            fahrzeuge_text += temp_auto_text_template.replace("[--fahrzeug--]", fahrzeug)
-            if fahrzeug == "TLF":
-                fahrzeuge_bild += temp_auto_tlf
-            elif fahrzeug == "RF-S":
-                fahrzeuge_bild += temp_auto_rf
-            elif fahrzeug == "MTF":
-                fahrzeuge_bild += temp_auto_mtf
-            elif fahrzeug == "VF":
-                fahrzeuge_bild += temp_auto_vf
-            elif fahrzeug == "KLF":
-                fahrzeuge_bild += temp_auto_klf
-            elif fahrzeug == "WLF":
-                fahrzeuge_bild += temp_auto_wlf
+            fahrzeuge_bild = ""
+            fahrzeuge_text = ""
+            fahrzeuge = self.generator_entry.fahrzeuge_entry.get_fahrzeuge()
+            if not fahrzeuge:
+                self.write_out("Fehler: Keine Fahrzeuge ausgewählt")
+                return
 
-        eingesetzte_menner_text = self.generator_entry.eingesetzte_menner.get()
+            for fahrzeug in fahrzeuge:
+                fahrzeuge_text += temp_auto_text_template.replace("[--fahrzeug--]", fahrzeug)
+                if fahrzeug == "TLF":
+                    fahrzeuge_bild += temp_auto_tlf
+                elif fahrzeug == "RF-S":
+                    fahrzeuge_bild += temp_auto_rf
+                elif fahrzeug == "MTF":
+                    fahrzeuge_bild += temp_auto_mtf
+                elif fahrzeug == "VF":
+                    fahrzeuge_bild += temp_auto_vf
+                elif fahrzeug == "KLF":
+                    fahrzeuge_bild += temp_auto_klf
+                elif fahrzeug == "WLF":
+                    fahrzeuge_bild += temp_auto_wlf
 
-        if not eingesetzte_menner_text.isnumeric():
-            self.write_out("Fehler: Eingesetzte Männer ist keine Zahl")
-            return
+            eingesetzte_menner_text = self.generator_entry.eingesetzte_menner.get()
 
-        eingesetzte_menner = int(eingesetzte_menner_text)
+            if not eingesetzte_menner_text.isnumeric():
+                self.write_out("Fehler: Eingesetzte Männer ist keine Zahl")
+                return
 
-        if not eingesetzte_menner:
-            self.write_out("Fehler: Keine eingesetzten Männer angegeben")
-            return
+            eingesetzte_menner = int(eingesetzte_menner_text)
 
-        andere_beteiligte = ""
-        unsere_ff = f'FF Böheimkirchen - Markt ({len(fahrzeuge)} Fahrzeug{"" if len(fahrzeuge)==1 else "e"} + {eingesetzte_menner} Mann ‑ inkl. Bereitschaft)'
-        andere_beteiligte += temp_andere_beteiligte.replace("[--andere--beteiligte--]", unsere_ff)
+            if not eingesetzte_menner:
+                self.write_out("Fehler: Keine eingesetzten Männer angegeben")
+                return
 
-        andere_beteiligte_read = self.generator_entry.andere_beteiligte.get()
-        if andere_beteiligte_read:
-            for andere in andere_beteiligte_read.splitlines():
-                andere_beteiligte += temp_andere_beteiligte.replace("[--andere--beteiligte--]", andere)
+            andere_beteiligte = ""
+            unsere_ff = f'FF Böheimkirchen - Markt ({len(fahrzeuge)} Fahrzeug{"" if len(fahrzeuge)==1 else "e"} + {eingesetzte_menner} Mann ‑ inkl. Bereitschaft)'
+            andere_beteiligte += temp_andere_beteiligte.replace("[--andere--beteiligte--]", unsere_ff)
 
-        bericht = self.generator_entry.einsatzbericht.get()
-        if not bericht:
-            self.write_out("Fehler: Kein Einsatzbericht angegeben")
-            return
+            andere_beteiligte_read = self.generator_entry.andere_beteiligte.get()
+            if andere_beteiligte_read:
+                for andere in andere_beteiligte_read.splitlines():
+                    andere_beteiligte += temp_andere_beteiligte.replace("[--andere--beteiligte--]", andere)
 
-        template = open("template_do_not_touch.html", "r", encoding="utf-8")
-        output = template.read()
-        output = output.replace("[--insert--date--here--]", date)
-        output = output.replace("[--insert--type--here--]", type)
-        output = output.replace("[--insert--meldebild--here--]", meldebild)
-        output = output.replace("[--insert--date--with--dots--here--]", date_with_dots)
-        output = output.replace("[--insert--uhrzeit--here--]", uhrzeit)
-        output = output.replace("[--insert--ort--here--]", ort)
-        output = output.replace("[--insert--alarmierung--here--]", alarmierung)
-        output = output.replace("[--insert--fahrzeuge--text--here--]", fahrzeuge_text)
-        output = output.replace("[--insert--fahrzeuge--bild--here--]", fahrzeuge_bild)
-        output = output.replace("[--insert--bericht--here--]", bericht.replace("\n", "<br />"))
-        output = output.replace("[--insert--andere--beteiligte--here--]", andere_beteiligte)
+            bericht = self.generator_entry.einsatzbericht.get()
+            if not bericht:
+                self.write_out("Fehler: Kein Einsatzbericht angegeben")
+                return
 
-        self.write_out(output)
+            template = open("template_do_not_touch.html", "r", encoding="utf-8")
+            output = template.read()
+            output = output.replace("[--insert--date--here--]", date)
+            output = output.replace("[--insert--type--here--]", type)
+            output = output.replace("[--insert--meldebild--here--]", meldebild)
+            output = output.replace("[--insert--date--with--dots--here--]", date_with_dots)
+            output = output.replace("[--insert--uhrzeit--here--]", uhrzeit)
+            output = output.replace("[--insert--ort--here--]", ort)
+            output = output.replace("[--insert--alarmierung--here--]", alarmierung)
+            output = output.replace("[--insert--fahrzeuge--text--here--]", fahrzeuge_text)
+            output = output.replace("[--insert--fahrzeuge--bild--here--]", fahrzeuge_bild)
+            output = output.replace("[--insert--bericht--here--]", bericht.replace("\n", "<br />"))
+            output = output.replace("[--insert--andere--beteiligte--here--]", andere_beteiligte)
+
+            self.write_out(output)
+
+        except Exception as e:
+            self.write_out(f"Fehler: {e}")
 
 
 class Generator(ctk.CTkFrame):
