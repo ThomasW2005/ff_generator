@@ -226,10 +226,10 @@ class App(ctk.CTk):
             output = output.replace("[--insert--bericht--here--]", self.bericht.replace("\n", "<br />"))
             output = output.replace("[--insert--andere--beteiligte--here--]", self.andere_beteiligte)
 
-        self.write_out(output)
+            self.write_out(output)
 
-    # except Exception as e:
-    #     self.write_out(f"Fehler: {e}")
+        except Exception as e:
+            self.write_out(f"Fehler: {e}")
 
 
 class Generator(ctk.CTkFrame):
