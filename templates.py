@@ -51,3 +51,11 @@ temp_auto_text_template = """<td align="center">
 temp_andere_beteiligte = """ <li>
                         <font size="+1">[--andere--beteiligte--]</font>
                     </li>"""
+
+temp_b_image = """https://image.jimcdn.com/app/cms/image/transf/dimension=120x10000:format=png/path/s47c677f812c00ba1/image/i41ccc95d7b5bfbe6/version/1531755152/image.png"""
+
+
+temp_t_image = """https://image.jimcdn.com/app/cms/image/transf/dimension=320x10000:format=png/path/s47c677f812c00ba1/image/i26273cd4d48cb25f/version/1531755148/image.png"""
+
+
+temp_s_image = """https://image.jimcdn.com/app/cms/image/transf/dimension=278x10000:format=gif/path/s47c677f812c00ba1/image/i398e35b7bba28a00/version/1531755156/image.gif"""
