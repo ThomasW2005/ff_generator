@@ -46,6 +46,8 @@ class App(ctk.CTk):
 
         # self.date = None
 
+        # self.date = None
+
         self.title("FF-Bhk Einsatzgenerator v1.1")
         # self.geometry("950x900")
         # self.geometry("950x880")
@@ -62,6 +64,10 @@ class App(ctk.CTk):
         self.button_generate_minimal = ctk.CTkButton(self.generator_entry, text="Generate Homepage Snippet", command=self.generate_snippet).grid(row=15, column=1, sticky="ew", padx=10, pady=10)
 
     def write_out(self, data):
+        self.error = False
+        if data.startswith("F"):
+            self.error = True
+
         self.error = False
         if data.startswith("F"):
             self.error = True
@@ -220,10 +226,10 @@ class App(ctk.CTk):
             output = output.replace("[--insert--bericht--here--]", self.bericht.replace("\n", "<br />"))
             output = output.replace("[--insert--andere--beteiligte--here--]", self.andere_beteiligte)
 
-            self.write_out(output)
+        self.write_out(output)
 
-        except Exception as e:
-            self.write_out(f"Fehler: {e}")
+    # except Exception as e:
+    #     self.write_out(f"Fehler: {e}")
 
 
 class Generator(ctk.CTkFrame):
