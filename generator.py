@@ -1,6 +1,8 @@
 import tkinter as tk
 import customtkinter as ctk
 from templates import *
+import locale
+from datetime import datetime
 
 
 class FahrzeugeFrame(ctk.CTkFrame):
@@ -43,6 +45,7 @@ class FahrzeugeFrame(ctk.CTkFrame):
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
+        locale.setlocale(locale.LC_TIME, "de_AT")
 
         # self.date = None
 
@@ -103,6 +106,9 @@ class App(ctk.CTk):
             if len(self.date) != 8:
                 self.write_out("Fehler: Datum ist nicht korrekt")
                 return
+
+            date_obj = datetime.strptime(self.date, "%d%m%Y")
+            self.weekday = date_obj.strftime("%A")
 
             self.uhrzeit = self.generator_entry.uhrzeit.get()
             if len(self.uhrzeit) != 5:
@@ -196,7 +202,7 @@ class App(ctk.CTk):
 
             output = output.replace("[--insert--type--image--]", self.type_text)
 
-            output = output.replace("[--insert--entire--date--]", self.date_with_dots)
+            output = output.replace("[--insert--entire--date--]", self.weekday + ", " + self.date_with_dots)
             output = output.replace("[--insert--date--here--]", self.date)
             output = output.replace("[--insert--type--here--]", self.type)
             output = output.replace("[--insert--meldebild--here--]", self.meldebild)
