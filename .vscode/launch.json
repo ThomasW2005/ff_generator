@@ -14,8 +14,12 @@
         },
         //create a config to compile the file ff_generator into an executable
         {
-            
+            "name": "pack",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}\\pack.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
         }
-
     ]
 }
