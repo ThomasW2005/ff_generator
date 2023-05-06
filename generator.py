@@ -71,10 +71,6 @@ class App(ctk.CTk):
         if data.startswith("F"):
             self.error = True
 
-        self.error = False
-        if data.startswith("F"):
-            self.error = True
-
         t = tk.Tk()
         t.withdraw()
         t.clipboard_clear()

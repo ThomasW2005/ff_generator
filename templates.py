@@ -40,7 +40,7 @@ temp_auto_klf = """<td>
 
 temp_auto_wlf = """<td>
                 <a href="http://www.ff-boeheimkirchen.at/%C3%BCber-uns/fuhrpark/wlf/"><img
-                        src="https://image.jimcdn.com/app/cms/image/transf/dimension=118x10000:format=png/path/s47c677f812c00ba1/image/ia27f06a7a02a154f/version/1446024218/image.png"
+                        src="https://image.jimcdn.com/app/cms/image/transf/dimension=118x10000:format=png/path/s47c677f812c00ba1/image/ic63cc508067c7c9b/version/1683354764/image.png"
                         alt="" /></a>
             </td>"""
 
